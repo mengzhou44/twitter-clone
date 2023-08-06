@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: twitter-clone
+    restart: always
+    environment:
+      POSTGRES_DB: demo # Replace 'my_database' with your desired database name
+      POSTGRES_USER: user # Replace 'my_username' with your desired username
+      POSTGRES_PASSWORD: password # Replace 'my_password' with your desired password
+    ports:
+      - '5432:5432' # Maps the container's PostgreSQL port to the host's port (change if necessary)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: meng.zhou@aer.ca
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - '80:80'
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
