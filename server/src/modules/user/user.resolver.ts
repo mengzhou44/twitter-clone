@@ -25,7 +25,7 @@ import {
   unfollowUser,
   verifyPassword,
 } from './user.service';
-import { Context } from '../../servers'
+import { Context } from '../../server';
 import { ApolloError } from 'apollo-server-core';
 
 @Resolver(() => User)
@@ -42,13 +42,12 @@ class UserResolver {
 
   @Authorized()
   @Query(() => User)
-  me(@Ctx() context: Context){
+  me(@Ctx() context: Context) {
     return context.user;
   }
 
   @Mutation(() => String)
   async login(@Arg('input') input: LoginInput, @Ctx() context: Context) {
-       
     const user = await findUserByEmailOrUsername(
       input.usernameOrEmail.toLowerCase()
     );
@@ -61,33 +60,36 @@ class UserResolver {
       password: user.password,
       candidatePassword: input.password,
     });
- 
 
     if (!isValid) {
       throw new ApolloError('Invalid credentials');
     }
 
-    const token = await context.reply?.jwtSign({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    });
+    try {
+      const token = await context.reply?.jwtSign({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      });
 
-    
-    if (!token) {
-      throw new ApolloError('Error signing token');
+      if (!token) {
+        throw new Error('token is null');
+      }
+
+      context.reply?.setCookie('token', token, {
+        domain: 'localhost',
+        path: '/',
+        secure: false,
+        httpOnly: true,
+        sameSite: false,
+      });
+
+      return token;
+
+    } catch (error) {
+      
+        throw new ApolloError('Error signing token');
     }
-
-    
-    context.reply?.setCookie('token', token, {
-      domain: 'localhost',
-      path: '/',
-      secure: false,
-      httpOnly: true,
-      sameSite: false,
-    });
-
-    return token;
   }
 
   @FieldResolver(() => UserFollowers)

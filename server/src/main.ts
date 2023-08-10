@@ -1,11 +1,10 @@
 import 'reflect-metadata';
-import {app,  createApolloServer, createSubscriptionServer } from  './servers';
- 
+import { app, createApolloServer, createSubscriptionServer } from './server';
+
 async function main() {
+  const { schema, server } = await createApolloServer(app);
 
-  const {schema, server}  = await createApolloServer(app);
-
-  createSubscriptionServer({schema, app}); 
+  createSubscriptionServer({ schema, app });
 
   app.get('/health', async () => 'OK');
 
