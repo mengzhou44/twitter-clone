@@ -13,7 +13,7 @@ import {
 } from 'type-graphql';
 import { CreateMessageInput, Message } from './message.dto';
 import { createMessage, findMessages } from './message.service';
-import { Context } from '../../utils/create-server';
+import { Context } from '../../servers';
 import { findUserById } from '../user/user.service';
 
 @Resolver(Message)

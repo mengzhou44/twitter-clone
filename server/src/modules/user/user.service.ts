@@ -17,10 +17,10 @@ export async function createUser(input: RegisterUserInput) {
   });
 }
 
-export async function findUserByEmailOrUsername(
+export  async  function findUserByEmailOrUsername(
   input: LoginInput['usernameOrEmail']
 ) {
-  return prisma.user.findFirst({
+  return await prisma.user.findFirst({
     where: {
       OR: [{ username: input }, { email: input }],
     },

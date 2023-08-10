@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --exit-child --transpile-only src/main.ts"
+    "dev": "ts-node-dev --exit-child --transpile-only src/main.ts",
+    "init:data": "node seed.js"
   },
   "author": "meng zhou",
   "license": "ISC",
