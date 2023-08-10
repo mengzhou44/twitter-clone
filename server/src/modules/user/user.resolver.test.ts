@@ -120,9 +120,8 @@ describe('UserResolver', () => {
     try {
       await resolver.login(fakeInput, context);
     } catch (error: any) {
-        console.log({error})
+      console.log({error})
       expect(error).to.be.instanceOf(ApolloError);
-   
       expect(error.message).to.equal('Error signing token');
     }
 
