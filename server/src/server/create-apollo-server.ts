@@ -1,12 +1,12 @@
 import { buildSchema } from 'type-graphql';
+import path from 'path'; 
 import { FastifyInstance } from 'fastify';
 import { ApolloServer } from 'apollo-server-fastify';
 import { ApolloServerPlugin } from 'apollo-server-plugin-base';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { AuthChecker } from 'type-graphql';
 import { buildContext, Context} from './fastify-instance';
-import { resolvers } from '../modules/resolvers';
-
+ 
 export async function createApolloServer(app: FastifyInstance) {
  
   const bearerAuthChecker: AuthChecker<Context> = ({ context }) => {
@@ -15,9 +15,9 @@ export async function createApolloServer(app: FastifyInstance) {
     }
     return false;
   };
-
+ 
   const schema = await buildSchema({
-    resolvers,
+    resolvers: [path.join(__dirname, '../modules/**/*.resolver.{ts,js}')],
     authChecker: bearerAuthChecker,
   });
 
