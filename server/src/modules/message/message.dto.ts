@@ -1,33 +1,33 @@
-import { Length } from 'class-validator';
-import { Field, ID, InputType, ObjectType } from 'type-graphql';
-import { User } from '../user/user.dto';
+import { Length } from 'class-validator'
+import { Field, ID, InputType, ObjectType } from 'type-graphql'
+import { User } from '../user/user.dto'
 
 @ObjectType()
 export class Message {
   @Field(() => ID, { nullable: false })
-  id: string;
+  id: string
 
   @Field(() => User, { nullable: false })
-  user: User;
+  user: User
 
   @Field(() => String, { nullable: false })
-  userId: string;
+  userId: string
 
   @Field(() => String, { nullable: false })
-  body: string;
+  body: string
 
   @Field()
-  createdAt: string;
+  createdAt: string
 
   @Field()
-  updatedAt: string;
+  updatedAt: string
 }
 
 @InputType()
 export class CreateMessageInput {
   @Length(6, 280)
   @Field(() => String, { nullable: false })
-  body: string;
+  body: string
 
-  userId: string;
+  userId: string
 }

@@ -1,13 +1,13 @@
-import fastifyCookie from '@fastify/cookie';
-import fastifyJwt from '@fastify/jwt';
+import fastifyCookie from '@fastify/cookie'
+import fastifyJwt from '@fastify/jwt'
 
-import fastifyCors from '@fastify/cors';
-import fastify, { FastifyReply, FastifyRequest } from 'fastify';
-import { User }  from '../modules/user/user.dto'
+import fastifyCors from '@fastify/cors'
+import fastify, { FastifyReply, FastifyRequest } from 'fastify'
+import { User } from '../modules/user/user.dto'
 
 export const app = fastify({
-  logger: true,
-});
+  logger: false,
+})
 
 app.register(fastifyCors, {
   credentials: true,
@@ -18,16 +18,16 @@ app.register(fastifyCors, {
         origin
       )
     ) {
-      return cb(null, true);
+      return cb(null, true)
     }
 
-    return cb(new Error('Not allowed'), false);
+    return cb(new Error('Not allowed'), false)
   },
-});
+})
 
 app.register(fastifyCookie, {
   parseOptions: {},
-});
+})
 
 app.register(fastifyJwt, {
   secret: 'change-me',
@@ -35,37 +35,43 @@ app.register(fastifyJwt, {
     cookieName: 'token',
     signed: false,
   },
-});
+})
 
 export const buildContext = async ({
   request,
   reply,
   connectionParams,
 }: {
-  request?: FastifyRequest;
-  reply?: FastifyReply;
+  request?: FastifyRequest
+  reply?: FastifyReply
   connectionParams?: {
-    Authorization: string;
-  };
+    Authorization: string
+  }
 }) => {
-   type CtxUser = Omit<User, 'password'>;
+  type CtxUser = Omit<User, 'password'> & { roles: string[] }
 
   if (connectionParams || !request) {
     try {
+      let user = app.jwt.verify<CtxUser>(connectionParams?.Authorization || '')
+
+      user.roles = user.isAdmin ? ['admin123'] : ['user']; 
+
       return {
-        user: app.jwt.verify<CtxUser>(connectionParams?.Authorization || ''),
-      };
+        user,
+      }
     } catch (e) {
-      return { user: null };
+      return { user: null }
     }
   }
 
   try {
-    const user = await request.jwtVerify<CtxUser>();
-    return { request, reply, user };
-  } catch (e) {
-    return { request, reply, user: null };
-  }
-};
+    let user = await request.jwtVerify<CtxUser>()
+    user.roles = user.isAdmin ? ['admin123'] : ['user']; 
 
-export type Context = Awaited<ReturnType<typeof buildContext>>;
+    return { request, reply, user }
+  } catch (e) {
+    return { request, reply, user: null }
+  }
+}
+
+export type Context = Awaited<ReturnType<typeof buildContext>>

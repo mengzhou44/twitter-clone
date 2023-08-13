@@ -70,6 +70,7 @@ class UserResolver {
         id: user.id,
         username: user.username,
         email: user.email,
+        isAdmin: user.isAdmin
       });
 
       if (!token) {
@@ -112,7 +113,7 @@ class UserResolver {
     };
   }
 
-  @Authorized()
+  @Authorized(['user'])
   @Query(() => [User])
   async users() {
     return findUsers();

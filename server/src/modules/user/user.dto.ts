@@ -3,14 +3,17 @@ import { IsEmail, Length } from 'class-validator';
 
 @ObjectType()
 export class User {
-  @Field(() => ID, { nullable: false })
+  @Field(() => ID)
   id: string;
 
-  @Field(() => ID, { nullable: false })
+  @Field()
   username: string;
 
-  @Field(() => ID, { nullable: false })
+  @Field(() => ID)
   email: string;
+
+  @Field()
+  isAdmin: boolean;
 
   password: string;
 }
@@ -29,6 +32,10 @@ export class RegisterUserInput {
   @Field()
   @Length(6, 56)
   password: string;
+
+  @Field()
+  isAdmin: boolean;
+
 }
 
 @InputType()

@@ -1,5 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
-
+import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
 export class OrderStats {
@@ -7,16 +6,14 @@ export class OrderStats {
   new: number
 
   @Field()
-  open: number;
+  open: number
 
   @Field()
-  completed: number;
+  completed: number
 
   @Field()
-  cancelled: number;
+  cancelled: number
 
   @Field()
   pending: number
-
-   
 }

@@ -83,6 +83,7 @@ describe('UserResolver', () => {
       username: 'testuser',
       email: 'test@example.com',
       password: 'hashedPassword',
+      isAdmin: false
     });
     sinon.stub(userService, 'verifyPassword').resolves(true);
 
@@ -111,6 +112,7 @@ describe('UserResolver', () => {
       username: 'testuser',
       email: 'test@example.com',
       password: 'hashedPassword',
+      isAdmin: false
     });
 
     sinon.stub(userService, 'verifyPassword').resolves(true);

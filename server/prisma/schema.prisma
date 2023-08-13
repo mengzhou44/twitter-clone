@@ -15,6 +15,7 @@ model User {
   email    String @unique
   username String @unique
   password String
+  isAdmin  Boolean @default(false)
 
   followedBy User[]    @relation("UserFollows")
   following  User[]    @relation("UserFollows")
